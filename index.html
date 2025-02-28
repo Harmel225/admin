@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscription Professionnelle</title>
+  <style>
+    /* Style global et arrière-plan dégradé */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    /* Conteneur principal de l'interface */
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    /* En-tête de la page */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #333;
+    }
+    header p {
+      color: #777;
+      font-size: 14px;
+    }
+    /* Style du formulaire */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    .form-group input,
+    .form-group select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #3a8ef3;
+      outline: none;
+      box-shadow: 0 0 5px rgba(58, 142, 243, 0.5);
+    }
+    /* Bouton de soumission */
+    button {
+      padding: 12px;
+      background-color: #3a8ef3;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #327ad1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Administration</h1>
+      <p>Formulaire d'inscription professionnelle</p>
+    </header>
+    <form id="inscriptionForm">
+      <div class="form-group">
+        <label for="nomPrenoms">Nom et Prénoms</label>
+        <input type="text" id="nomPrenoms" placeholder="Ex : Dupont Jean" required>
+      </div>
+      <div class="form-group">
+        <label for="fonction">Fonction</label>
+        <input type="text" id="fonction" placeholder="Ex : Manager" required>
+      </div>
+      <div class="form-group">
+        <label for="service">Service</label>
+        <input type="text" id="service" placeholder="Ex : Ressources Humaines" required>
+      </div>
+      <div class="form-group">
+        <label for="cdi">CDI</label>
+        <select id="cdi" required>
+          <option value="">-- Sélectionnez --</option>
+          <option value="Oui">Oui</option>
+          <option value="Non">Non</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="telephone">Numéro de Téléphone</label>
+        <input type="tel" id="telephone" placeholder="Ex : 0707070707" required>
+      </div>
+      <button type="submit">S'inscrire</button>
+    </form>
+  </div>
+  
+  <script>
+    document.getElementById('inscriptionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Récupérer les valeurs du formulaire
+      const nomPrenoms = document.getElementById('nomPrenoms').value;
+      const fonction   = document.getElementById('fonction').value;
+      const service    = document.getElementById('service').value;
+      const cdi        = document.getElementById('cdi').value;
+      const telephone  = document.getElementById('telephone').value;
+      
+      // Date d'inscription (format "JJ/MM/AAAA")
+      const today = new Date();
+      const dateInscription = today.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      
+      // Incrémentation du compteur d'inscription via localStorage
+      let compteur = localStorage.getItem('inscriptionCounter') || 0;
+      compteur = parseInt(compteur) + 1;
+      localStorage.setItem('inscriptionCounter', compteur);
+      
+      // Construction du message incluant le numéro d'ordre et la date d'inscription
+      const message = encodeURIComponent(
+        `*Nouvelle inscription (n° ${compteur})*\n` +
+        `*Date :* ${dateInscription}\n` +
+        `*Nom et Prénoms :* ${nomPrenoms}\n` +
+        `*Fonction :* ${fonction}\n` +
+        `*Service :* ${service}\n` +
+        `*CDI :* ${cdi}\n` +
+        `*Téléphone :* ${telephone}`
+      );
+      
+      // Numéro WhatsApp de destination (avec l'indicatif international, sans le "+")
+      const numeroWhatsApp = '2250708382196';
+      const url = `https://wa.me/${numeroWhatsApp}?text=${message}`;
+      
+      // Ouverture de WhatsApp dans un nouvel onglet
+      window.open(url, '_blank');
+      
+      // Réinitialisation du formulaire pour vider tous les champs
+      document.getElementById('inscriptionForm').reset();
+    });
+  </script>
+</body>
+</html>
